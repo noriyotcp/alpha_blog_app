@@ -12,6 +12,7 @@ class CommentsController < ApplicationController
 
     if @comment.save
       ActionCable.server.broadcast 'comments', render(partial: 'comments/comment', object: @comment)
+      # TODO: Invastigate how to use ActionCable and flash messages
       flash[:notice] = 'Comment has been created'
     else
       flash.now[:alert] = 'Comment has not been created'
