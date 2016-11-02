@@ -19,7 +19,8 @@
   <% end %>
 
   <div class="col-md-12">
-    <%= form_for [@article, @comment], html: { class: 'form-horizontal', role: 'form' } do |f| %>
+    <%= form_for [@article, @comment], remote: true,
+        html: { class: 'form-horizontal', role: 'form' } do |f| %>
       <%= render 'shared/error_messages_on_form', object: @comment %>
 
       <div class="form-group">
@@ -45,16 +46,18 @@
 
     <div class="col-md-10">
       <% if @article.comments.any? %>
-        <% persisted_comments(@comments).each do |comment| %>
-          <div class="comment-body">
-            <%= comment.body %>
-          </div>
+        <div id="messages">
+          <% persisted_comments(@comments).each do |comment| %>
+            <div class="comment-body">
+              <%= comment.body %>
+            </div>
 
-          <div class="comment-time">
-            <%= time_ago_in_words(comment.created_at) %>
-            ago by <%= comment.user.email %>
-          </div>
-        <% end %>
+            <div class="comment-time">
+              <%= time_ago_in_words(comment.created_at) %>
+              ago by <%= comment.user.email %>
+            </div>
+          <% end %>
+        </div>
       <% else %>
         There are no comments to show.
       <% end %>
