@@ -1,6 +1,7 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_article, only: [:show, :edit, :update, :destroy]
+
   def index
     @articles = Article.all.order(created_at: :desc)
   end
@@ -25,6 +26,10 @@ class ArticlesController < ApplicationController
   end
 
   def edit
+    unless @article.user == current_user
+      flash[:alert] = "You can only edit your own article."
+      redirect_to root_path
+    end
   end
 
   def update
@@ -38,6 +43,11 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
+    unless @article.user == current_user
+      flash[:alert] = "You can only delete your own article."
+      redirect_to root_path and return
+    end
+
     if @article.destroy
       flash[:success] = "Article has been deleted"
       redirect_to articles_path
@@ -51,7 +61,6 @@ class ArticlesController < ApplicationController
       flash[:danger] = message
       redirect_to root_path
     end
-
 
   private
     def article_params
