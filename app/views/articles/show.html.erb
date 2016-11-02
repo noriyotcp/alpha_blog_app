@@ -48,14 +48,7 @@
       <% if @article.comments.any? %>
         <div id="messages">
           <% persisted_comments(@comments).each do |comment| %>
-            <div class="comment-body">
-              <%= comment.body %>
-            </div>
-
-            <div class="comment-time">
-              <%= time_ago_in_words(comment.created_at) %>
-              ago by <%= comment.user.email %>
-            </div>
+            <%= render 'comments/comment', comment: comment %>
           <% end %>
         </div>
       <% else %>
